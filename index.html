@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gurnoor Kaur — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & Variables ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:   #fdf6f6;
+      --ink:     #2d1f24;
+      --warm:    #c9a0b0;
+      --rust:    #a85c78;
+      --muted:   #9e7d8a;
+      --border:  #e8d4db;
+      --col:     calc((100% - 120px) / 12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Grain overlay ─────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* ── Typography helpers ─────────────────────────────── */
+    .serif        { font-family: 'Playfair Display', serif; }
+    .mono         { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.08em; }
+    .label        { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .rule         { border: none; border-top: 1px solid var(--border); }
+
+    /* ── Navigation ─────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 900;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(245, 240, 232, 0.92);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--rust); }
+
+    /* ── Hero ───────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+
+    .hero-left {
+      padding: 80px 60px 80px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .hero-issue {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .hero-issue-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--warm);
+      opacity: 0.4;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 6vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--rust);
+    }
+
+    .hero-tagline {
+      margin-top: 24px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 380px;
+    }
+
+    .hero-meta {
+      margin-top: 48px;
+      display: flex; gap: 40px;
+    }
+
+    .hero-meta-item strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .hero-meta-item span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-cta {
+      margin-top: 56px;
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 3px;
+      width: fit-content;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .hero-cta:hover { color: var(--rust); border-color: var(--rust); }
+    .hero-cta .arrow { font-size: 1rem; transition: transform 0.2s; }
+    .hero-cta:hover .arrow { transform: translateX(5px); }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+      background: #3d2530;
+    }
+
+    .hero-photo {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      display: block;
+    }
+
+    .hero-photo-caption {
+      position: absolute;
+      bottom: 32px; right: 32px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.6);
+      writing-mode: vertical-lr;
+    }
+
+    .hero-right .corner-label {
+      position: absolute;
+      top: 32px; left: 32px;
+      background: var(--rust);
+      color: var(--cream);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+    }
+
+    /* ── Section scaffolding ────────────────────────────── */
+    section { padding: 100px 48px; }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .section-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      font-weight: 900;
+      color: var(--border);
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* ── About ──────────────────────────────────────────── */
+    #about {
+      border-top: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 1.1rem;
+      line-height: 1.85;
+      margin-bottom: 20px;
+      color: #3a3028;
+    }
+
+    .about-text p:first-child::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 4.2rem;
+      font-weight: 900;
+      float: left;
+      line-height: 0.75;
+      margin: 8px 12px 0 0;
+      color: var(--rust);
+    }
+
+    .about-pull {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--ink);
+      border-left: 3px solid var(--warm);
+      padding-left: 24px;
+      margin-top: 32px;
+    }
+
+    .about-sidebar {
+      padding-top: 4px;
+    }
+
+    .sidebar-card {
+      border: 1px solid var(--border);
+      padding: 28px;
+      margin-bottom: 24px;
+      background: white;
+    }
+
+    .sidebar-card h3 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-card ul { list-style: none; }
+    .sidebar-card li {
+      font-size: 0.92rem;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-card li:last-child { border-bottom: none; }
+
+    .skill-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--warm);
+      flex-shrink: 0;
+    }
+
+    /* ── Projects ───────────────────────────────────────── */
+    #projects {
+      background: #2d1f24;
+      color: var(--cream);
+      border-top: 4px solid var(--warm);
+    }
+
+    #projects .section-header h2 { color: var(--cream); }
+    #projects .section-number { color: rgba(255,255,255,0.08); }
+    #projects .label { color: var(--warm); }
+
+    .projects-grid {
+      display: grid;
+      gap: 2px;
+    }
+
+    .project-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: border-color 0.3s;
+      cursor: default;
+    }
+
+    .project-card:hover { border-color: var(--warm); }
+
+    .project-card:nth-child(even) {
+      direction: rtl;
+    }
+
+    .project-card:nth-child(even) > * {
+      direction: ltr;
+    }
+
+    .project-image-wrap {
+      overflow: hidden;
+      background: #3d2530;
+      aspect-ratio: 4/3;
+    }
+
+    .project-image-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease, opacity 0.3s;
+      opacity: 0.75;
+    }
+
+    .project-card:hover .project-image-wrap img {
+      transform: scale(1.04);
+      opacity: 0.9;
+    }
+
+    .project-content {
+      padding: 52px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .project-index {
+      font-family: 'Playfair Display', serif;
+      font-size: 6rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+      margin-bottom: -16px;
+      user-select: none;
+    }
+
+    .project-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--warm);
+      margin-bottom: 12px;
+    }
+
+    .project-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .project-desc {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: rgba(245,240,232,0.65);
+    }
+
+    .project-placeholder-note {
+      margin-top: 20px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: rgba(200,169,110,0.45);
+      font-style: italic;
+    }
+
+    /* ── Shine Feature ──────────────────────────────────── */
+    #shine {
+      background: var(--rust);
+      color: var(--cream);
+      padding: 80px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .shine-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.6);
+      margin-bottom: 20px;
+    }
+
+    .shine-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4.5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 24px;
+    }
+
+    .shine-headline em { font-style: italic; opacity: 0.7; }
+
+    .shine-body {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: rgba(245,240,232,0.8);
+    }
+
+    .shine-stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .shine-stat {
+      background: rgba(0,0,0,0.15);
+      padding: 32px;
+      text-align: center;
+    }
+
+    .shine-stat strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      display: block;
+    }
+
+    .shine-stat span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+
+    /* ── Contact ────────────────────────────────────────── */
+    #contact {
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding: 0;
+    }
+
+    .contact-left {
+      padding: 100px 60px 100px 48px;
+      border-right: 1px solid var(--border);
+    }
+
+    .contact-right {
+      padding: 100px 48px 100px 60px;
+      background: #fff5f7;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .contact-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      margin-bottom: 24px;
+    }
+
+    .contact-headline em {
+      font-style: italic;
+      color: var(--rust);
+    }
+
+    .contact-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 360px;
+      margin-bottom: 48px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--ink);
+      transition: color 0.2s;
+    }
+
+    .contact-link:last-child { border-bottom: 1px solid var(--border); }
+    .contact-link:hover { color: var(--rust); }
+
+    .contact-link-icon {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .contact-link:hover .contact-link-icon {
+      background: var(--rust);
+      border-color: var(--rust);
+      color: white;
+    }
+
+    .contact-link-text strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .contact-link-text span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .contact-big-email {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      font-weight: 700;
+      word-break: break-all;
+      margin-bottom: 36px;
+    }
+
+    .contact-note {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      padding: 24px;
+      background: var(--cream);
+      border-left: 3px solid var(--warm);
+    }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    footer {
+      background: #2d1f24;
+      color: rgba(245,240,232,0.4);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    footer a { color: var(--warm); text-decoration: none; }
+
+    /* ── Animations ─────────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* stagger children */
+    .fade-in:nth-child(2) { transition-delay: 0.1s; }
+    .fade-in:nth-child(3) { transition-delay: 0.2s; }
+    .fade-in:nth-child(4) { transition-delay: 0.3s; }
+
+    /* ── Responsive ─────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { gap: 20px; }
+
+      #hero { grid-template-columns: 1fr; }
+
+      .hero-left { padding: 60px 24px; border-right: none; border-bottom: 1px solid var(--border); }
+      .hero-right { min-height: 60vw; }
+
+      section { padding: 72px 24px; }
+      #shine { grid-template-columns: 1fr; padding: 64px 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .project-card { grid-template-columns: 1fr; direction: ltr !important; }
+      .project-card:nth-child(even) { direction: ltr; }
+      .project-image-wrap { aspect-ratio: 16/9; }
+      .project-content { padding: 36px 28px; }
+      #contact { grid-template-columns: 1fr; }
+      .contact-left { padding: 72px 24px; border-right: none; border-bottom: 1px solid var(--border); }
+      .contact-right { padding: 48px 24px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Navigation ───────────────────────────────────── -->
+  <nav>
+    <a class="nav-logo" href="#hero">GK</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#shine">Shine</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-left">
+      <div class="hero-issue fade-in">
+        <span class="label">Vol. I &nbsp;·&nbsp; NYU Stern &nbsp;·&nbsp; Class of 2028</span>
+      </div>
+      <h1 class="hero-name fade-in">
+        Gurnoor<br /><em>Kaur</em>
+      </h1>
+      <p class="hero-tagline fade-in">
+        Freshman at NYU Stern studying Business, Technology & Entrepreneurship — and co-founder of an organization making mental health visible for youth.
+      </p>
+      <div class="hero-meta fade-in">
+        <div class="hero-meta-item">
+          <strong>BTE</strong>
+          <span>Major</span>
+        </div>
+        <div class="hero-meta-item">
+          <strong>NYC</strong>
+          <span>Based in</span>
+        </div>
+        <div class="hero-meta-item">
+          <strong>2028</strong>
+          <span>Graduating</span>
+        </div>
+      </div>
+      <a class="hero-cta fade-in" href="#about">
+        Read the full story <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="hero-right">
+      <span class="corner-label">Featured</span>
+      <!-- Replace src with your actual headshot path -->
+      <img
+        class="hero-photo"
+        src="images/headshot.jpg"
+        alt="Portrait of Gurnoor Kaur, freshman at NYU Stern, smiling in a professional setting"
+      />
+      <span class="hero-photo-caption">Gurnoor Kaur — 2024</span>
+    </div>
+  </section>
+
+  <!-- ── About ─────────────────────────────────────────── -->
+  <section id="about">
+    <div class="section-header fade-in">
+      <span class="section-number">01</span>
+      <h2>About<br /><em style="font-style:italic; font-family:'Playfair Display',serif;">Me</em></h2>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <p>
+          I'm Gurnoor Kaur — a Business, Technology & Entrepreneurship student at NYU Stern with a deep belief that the best ideas sit at the intersection of people and systems. Growing up, I saw firsthand how mental health conversations were missing in youth spaces, which led me to co-found Project Shine, a mental health awareness organization giving young people language and community around their inner lives.
+        </p>
+        <p>
+          My work spans leadership, communication, and the operational backbone that keeps organizations moving — from managing teams to navigating the fast-paced demands of customer-facing roles. I'm drawn to problems that matter: how we build tools, communities, and companies that actually serve people.
+        </p>
+        <blockquote class="about-pull">
+          "Awareness is the first act of change."
+        </blockquote>
+      </div>
+
+      <aside class="about-sidebar fade-in">
+        <div class="sidebar-card">
+          <h3>Skills & Strengths</h3>
+          <ul>
+            <li><span class="skill-dot"></span>Leadership</li>
+            <li><span class="skill-dot"></span>Communication</li>
+            <li><span class="skill-dot"></span>Time Management</li>
+            <li><span class="skill-dot"></span>Computer Literacy</li>
+            <li><span class="skill-dot"></span>Microsoft Word</li>
+            <li><span class="skill-dot"></span>Customer Service</li>
+            <li><span class="skill-dot"></span>English (Fluent)</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Currently</h3>
+          <ul>
+            <li><span class="skill-dot" style="background:var(--rust)"></span>NYU Stern — BTE Major</li>
+            <li><span class="skill-dot" style="background:var(--rust)"></span>Co-founder, Project Shine</li>
+            <li><span class="skill-dot" style="background:var(--rust)"></span>New York City</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ── Projects ──────────────────────────────────────── -->
+  <section id="projects">
+    <div class="section-header fade-in">
+      <span class="section-number">02</span>
+      <h2>Selected<br /><em style="font-style:italic; font-family:'Playfair Display',serif;">Work</em></h2>
+    </div>
+
+    <div class="projects-grid">
+
+      <!-- Project 1 -->
+      <article class="project-card fade-in">
+        <div class="project-image-wrap">
+          <!-- Replace with your actual project image -->
+          <img
+            src="images/project-1.jpg"
+            alt="Screenshot or photo representing Project 1 — add a description of what this project looks like or its outcome"
+          />
+        </div>
+        <div class="project-content">
+          <div class="project-index">01</div>
+          <div class="project-tag">Project · 2024</div>
+          <h3 class="project-title">Project Title One</h3>
+          <p class="project-desc">
+            Replace this placeholder with a description of your first project — what you built, what problem it solved, what your role was, and what you learned. Keep it honest and specific; real detail is always more compelling than vague claims.
+          </p>
+          <p class="project-placeholder-note">← Paste your project details here</p>
+        </div>
+      </article>
+
+      <!-- Project 2 -->
+      <article class="project-card fade-in">
+        <div class="project-image-wrap">
+          <img
+            src="images/project-2.jpg"
+            alt="Screenshot or photo representing Project 2 — add a description of what this project looks like or its outcome"
+          />
+        </div>
+        <div class="project-content">
+          <div class="project-index">02</div>
+          <div class="project-tag">Project · 2024</div>
+          <h3 class="project-title">Project Title Two</h3>
+          <p class="project-desc">
+            Replace this with a description of your second project — the context, your contribution, and the result. One or two concrete outcomes (numbers, impact, recognition) go a long way.
+          </p>
+          <p class="project-placeholder-note">← Paste your project details here</p>
+        </div>
+      </article>
+
+      <!-- Project 3 -->
+      <article class="project-card fade-in">
+        <div class="project-image-wrap">
+          <img
+            src="images/project-3.jpg"
+            alt="Screenshot or photo representing Project 3 — add a description of what this project looks like or its outcome"
+          />
+        </div>
+        <div class="project-content">
+          <div class="project-index">03</div>
+          <div class="project-tag">Project · 2024</div>
+          <h3 class="project-title">Project Title Three</h3>
+          <p class="project-desc">
+            Replace this with a description of your third project. If it's ongoing, say so — it shows initiative and momentum, which matters.
+          </p>
+          <p class="project-placeholder-note">← Paste your project details here</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── Project Shine Feature ─────────────────────────── -->
+  <div id="shine">
+    <div class="fade-in">
+      <p class="shine-eyebrow">Featured Initiative</p>
+      <h2 class="shine-headline">Project<br /><em>Shine</em></h2>
+      <p class="shine-body">
+        Co-founded to fill a gap that too many young people feel but can't name — Project Shine is a mental health awareness organization built for youth, by youth. Through community programming, open conversation, and peer-led support, Shine creates the spaces where the next generation can learn that asking for help is strength, not weakness.
+      </p>
+    </div>
+    <div class="shine-stat-grid fade-in">
+      <div class="shine-stat">
+        <strong>Youth</strong>
+        <span>Audience Focus</span>
+      </div>
+      <div class="shine-stat">
+        <strong>Co-<br/>Founded</strong>
+        <span>Role</span>
+      </div>
+      <div class="shine-stat">
+        <strong>Mental<br/>Health</strong>
+        <span>Mission Area</span>
+      </div>
+      <div class="shine-stat">
+        <strong>Community<br/>Driven</strong>
+        <span>Approach</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Contact ───────────────────────────────────────── -->
+  <section id="contact">
+    <div class="contact-left fade-in">
+      <p class="label" style="margin-bottom:20px;">03 — Get in Touch</p>
+      <h2 class="contact-headline">Let's<br /><em>Connect</em></h2>
+      <p class="contact-sub">
+        Whether it's a collaboration, an opportunity, or just a conversation — I'd love to hear from you.
+      </p>
+
+      <a class="contact-link" href="mailto:gurnoorkaurr07@gmail.com">
+        <div class="contact-link-icon">✉</div>
+        <div class="contact-link-text">
+          <strong>Send an Email</strong>
+          <span>gurnoorkaurr07@gmail.com</span>
+        </div>
+      </a>
+      <a class="contact-link" href="https://linkedin.com" target="_blank" rel="noopener">
+        <div class="contact-link-icon">in</div>
+        <div class="contact-link-text">
+          <strong>LinkedIn</strong>
+          <span>Connect professionally</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="contact-right fade-in">
+      <p class="label" style="margin-bottom:16px;">Primary contact</p>
+      <p class="contact-big-email">gurnoorkaurr07<br/>@gmail.com</p>
+      <div class="contact-note">
+        I'm a freshman, so I'm actively exploring internships, part-time opportunities, and meaningful collaborations — especially in entrepreneurship, social impact, and technology. Don't hesitate to reach out.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────── -->
+  <footer>
+    <span>© 2024 Gurnoor Kaur</span>
+    <span>NYU Stern &nbsp;·&nbsp; BTE &nbsp;·&nbsp; Class of 2028</span>
+    <span>Built with intention</span>
+  </footer>
+
+  <!-- ── Scroll animations ──────────────────────────────── -->
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
